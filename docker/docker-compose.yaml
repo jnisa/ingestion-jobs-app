@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  tasman_db:
+    image: usajobs-database:latest
+    container_name: usajobs-db
+    build:
+      context: ./pg/
+      dockerfile: ./Dockerfile
+    volumes:
+      - "/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"
+
+  tasman_extraction:
+    image: usajobs-extraction:latest
+    container_name: usajobs-extraction
+    build:
+      context: ../.
+      dockerfile: ./docker/extraction/Dockerfile
+    ports:
+      - 3030:3030
+    links:
+      - tasman_db
